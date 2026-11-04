@@ -1,8 +1,8 @@
-# Alfonso 16
+# Alfonso 17
 
-Die sichtbare Versionsnummer lautet ab jetzt nur **16**, danach **17**, **18** usw.
+Die sichtbare Versionsnummer lautet ab jetzt nur **17**, danach **18**, **19** usw.
 Die interne Android-Buildnummer wird für sichere Updates weiter erhöht, aber
-nicht in der Oberfläche angezeigt. APK-Dateiname: `Alfonso-16.apk`.
+nicht in der Oberfläche angezeigt. APK-Dateiname: `Alfonso-17.apk`.
 
 ## App aktualisieren (GitHub Releases)
 
@@ -45,9 +45,9 @@ und die von GitHub verwendeten Release-Downloadhosts.
 3. `ANDROID_HOME` setzen und mit Python 3.11+ `python3 scripts/prepare-release.py`
    ausführen. Das Skript prüft per `apksigner` und `aapt` Signatur, Paket und Version
    gegen die Build-Konfiguration und erzeugt unter `app/build/outputs/github-release/`
-   `Alfonso-<letzte Versionsnummer>.apk` (aktuell `Alfonso-16.apk`) und `alfonso-update.json`.
+   `Alfonso-<letzte Versionsnummer>.apk` (aktuell `Alfonso-17.apk`) und `alfonso-update.json`.
 4. Beide geprüften Dateien zusammen mit Änderungsbeschreibung an einen regulären
-   GitHub Release hängen, etwa Tag `v16`, Titel `Alfonso 16`.
+   GitHub Release hängen, etwa Tag `v17`, Titel `Alfonso 17`.
    Erst mit beiden Assets veröffentlichen; vorhandene Release-Dateien nicht unter
    derselben Version austauschen. Für spätere Updates immer einen neuen Release
    und höheren versionCode verwenden. SHA-256 ist eine Integritätsprüfung;
@@ -61,9 +61,9 @@ Metadatenschema des Release-Assets `alfonso-update.json`:
 ```json
 {
   "applicationId": "de.parip69.homesprachsteuerung",
-  "versionCode": 27,
-  "versionName": "16",
-  "apkFileName": "Alfonso-16.apk",
+  "versionCode": 28,
+  "versionName": "17",
+  "apkFileName": "Alfonso-17.apk",
   "sha256": "<64 Hex-Zeichen, vom Vorbereitungsskript berechnet>"
 }
 ```
