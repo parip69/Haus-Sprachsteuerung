@@ -16,8 +16,8 @@ android {
         applicationId = "de.parip69.homesprachsteuerung"
         minSdk = 26
         targetSdk = 35
-        versionCode = 28
-        versionName = "17"
+        versionCode = 29
+        versionName = "18"
     }
     sourceSets.getByName("main").res.srcDir("src/icons/$iconVariant/res")
     buildFeatures { viewBinding = true }
@@ -67,5 +67,6 @@ dependencies {
 // Test the actual signed APK, including corrupt-file rejection.
 tasks.withType<org.gradle.api.tasks.testing.Test>().configureEach {
     dependsOn("assembleRelease")
+    inputs.file(layout.buildDirectory.file("outputs/apk/release/app-release.apk"))
     systemProperty("alfonso.testApk", layout.buildDirectory.file("outputs/apk/release/app-release.apk").get().asFile.absolutePath)
 }

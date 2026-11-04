@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit
 internal const val UPDATE_PACKAGE = "de.parip69.homesprachsteuerung"
 internal const val UPDATE_CERT = "c32561af99bf0593178a31fa6b5fce55a2419ad121184999c6efd2df6918b564"
 internal const val RELEASE_ROOT = "https://github.com/parip69/Haus-Sprachsteuerung/releases/download/"
+internal const val REPOSITORY_DOWNLOADS = "https://raw.githubusercontent.com/parip69/Haus-Sprachsteuerung/main/downloads/"
 internal const val MAX_APK_BYTES = 200L * 1024 * 1024
 
 internal data class UpdateAsset(val name: String, val url: String, val size: Long)
@@ -55,6 +56,19 @@ internal object UpdatePolicy {
             asset.size in 1..MAX_APK_BYTES) { "Ungültige Release-Datei oder Downloadadresse." }
         return asset
     }
+    fun repositoryAsset(document: JSONObject, metadata: UpdateMetadata): UpdateAsset {
+        val address = document.getString("downloadUrl")
+        val url = address.toHttpUrl()
+        require(address == REPOSITORY_DOWNLOADS + metadata.apkFileName && url.isHttps &&
+            url.username.isEmpty() && url.password.isEmpty() && url.port == 443) {
+            "Die Updateadresse gehört nicht zu den veröffentlichten Alfonso-Dateien."
+        }
+        val rawSize = document.get("size").toString()
+        require(rawSize.matches(Regex("[1-9][0-9]*"))) { "Ungültige APK-Dateigröße." }
+        val size = rawSize.toLong()
+        require(size in 1..MAX_APK_BYTES) { "Ungültige APK-Dateigröße." }
+        return UpdateAsset(metadata.apkFileName, address, size)
+    }
     fun verifyIdentity(meta: UpdateMetadata, installed: Long, packageName: String, code: Long,
         versionName: String?, signers: Set<String>) {
         require(packageName == UPDATE_PACKAGE && meta.applicationId == packageName) { "Die APK gehört zu einer anderen App." }
@@ -77,25 +91,24 @@ internal class UpdateSource(private val client: OkHttpClient = OkHttpClient.Buil
     .connectTimeout(15, TimeUnit.SECONDS).readTimeout(30, TimeUnit.SECONDS)
     .callTimeout(60, TimeUnit.SECONDS).followSslRedirects(false).build()) {
     fun latest(installed: Long): Triple<UpdateMetadata, UpdateAsset, String>? {
-        val text = get("https://api.github.com/repos/parip69/Haus-Sprachsteuerung/releases/latest", true) ?: return null
-        val release = UpdatePolicy.release(text) ?: return null
-        val manifest = UpdatePolicy.asset(release, "alfonso-update.json")
-        require(manifest.size <= 65536) { "Die Update-Metadaten sind zu groß." }
-        val metadata = UpdateMetadata.parse(get(manifest.url, false)!!)
-        val apk = UpdatePolicy.asset(release, metadata.apkFileName)
-        // Numeric comparison only; tags and display names are never interpreted as versions.
-        require(metadata.versionCode > 0 && installed >= 0)
-        return Triple(metadata, apk, release.notes)
+        require(installed >= 0)
+        val text = get(REPOSITORY_DOWNLOADS + "alfonso-update.json?check=" + System.currentTimeMillis(), true) ?: return null
+        val document = JSONObject(text)
+        if (document.optString("channel") != "stable") return null
+        val metadata = UpdateMetadata.parse(text)
+        val apk = UpdatePolicy.repositoryAsset(document, metadata)
+        return Triple(metadata, apk, document.optString("notes", "").take(20000))
     }
+
     private fun get(url: String, releaseRequest: Boolean): String? {
-        val request = Request.Builder().url(url).header("Accept", if (releaseRequest) "application/vnd.github+json" else "application/octet-stream")
-            .header("User-Agent", "Alfonso-Android-Updater").build()
+        val request = Request.Builder().url(url).header("Accept", if (releaseRequest) "application/json" else "application/octet-stream")
+            .header("Cache-Control", "no-cache, no-store").header("User-Agent", "Alfonso-Android-Updater").build()
         client.newCall(request).execute().use { response ->
             if (releaseRequest && response.code == 404) return null
-            if (response.code == 403 || response.code == 429) throw IOException("GitHub-Zugriff begrenzt. Bitte später erneut versuchen. Bei privaten Repositories sind öffentliche Release-Dateien erforderlich.")
+            if (response.code == 403 || response.code == 429) throw IOException("GitHub-Zugriff begrenzt. Bitte später erneut versuchen. Die Update-Dateien müssen öffentlich zugänglich sein.")
             if (!response.isSuccessful) throw IOException("GitHub antwortet mit HTTP ${response.code}. Bitte später erneut versuchen.")
             val body = response.body ?: throw IOException("GitHub liefert keine Daten.")
-            val limit = if (releaseRequest) 1024 * 1024 else 65536
+            val limit = 65536
             val bytes = body.byteStream().use { input ->
                 val output = java.io.ByteArrayOutputStream()
                 val buffer = ByteArray(8192)

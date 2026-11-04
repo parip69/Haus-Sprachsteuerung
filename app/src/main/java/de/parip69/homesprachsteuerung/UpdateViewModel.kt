@@ -75,7 +75,7 @@ internal class UpdateViewModel(app: Application) : AndroidViewModel(app) {
             if (id != -1L) downloads.remove(id)
             file.parentFile!!.mkdirs()
             require(!file.exists() || file.delete()) { "Alte Update-Datei kann nicht entfernt werden." }
-            // Only browser_download_url returned by GitHub is used, never a guessed filename URL.
+            // Use the explicit download URL from the published repository manifest.
             val request = DownloadManager.Request(Uri.parse(found.second.url))
                 .setTitle("Alfonso ${found.first.versionName}")
                 .setDescription("App-Update herunterladen")

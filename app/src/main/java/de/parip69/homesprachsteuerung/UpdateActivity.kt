@@ -67,7 +67,7 @@ class UpdateActivity : AppCompatActivity() {
         }
         cancel = button("Download abbrechen").apply { setOnClickListener { model.cancelDownload() } }
         notes = text("")
-        text("Updates kommen aus den öffentlichen GitHub-Releases dieses Projekts. Android fragt vor jeder Installation nach. Einstellungen und Verlauf bleiben beim Update erhalten. Keine Deinstallation nötig.")
+        text("Updates kommen aus den öffentlichen GitHub-Dateien dieses Projekts. Android fragt vor jeder Installation nach. Einstellungen und Verlauf bleiben beim Update erhalten. Keine Deinstallation nötig.")
         button("Zurück").setOnClickListener { finish() }
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {

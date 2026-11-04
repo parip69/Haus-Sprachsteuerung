@@ -38,6 +38,9 @@ shutil.copyfile(APK, out / name)
 with (out / name).open("rb") as stream:
     digest = hashlib.file_digest(stream, "sha256").hexdigest()
 metadata = {"applicationId": application_id, "versionCode": int(code), "versionName": version,
-            "apkFileName": name, "sha256": digest}
+            "apkFileName": name, "sha256": digest, "channel": "stable",
+            "size": (out / name).stat().st_size,
+            "downloadUrl": f"https://raw.githubusercontent.com/parip69/Haus-Sprachsteuerung/main/downloads/{name}",
+            "notes": (ROOT / f"docs/releases/{version}.md").read_text() if (ROOT / f"docs/releases/{version}.md").exists() else f"Alfonso {version}"}
 (out / "alfonso-update.json").write_text(json.dumps(metadata, indent=2) + "\n")
 print(f"Verified release assets: {out / name}\n{out / 'alfonso-update.json'}")

@@ -1,79 +1,59 @@
-# Alfonso 17
+# Alfonso 18
 
-Die sichtbare Versionsnummer lautet ab jetzt nur **17**, danach **18**, **19** usw.
-Die interne Android-Buildnummer wird für sichere Updates weiter erhöht, aber
-nicht in der Oberfläche angezeigt. APK-Dateiname: `Alfonso-17.apk`.
+## Updates ohne zusätzlichen Token
 
-## App aktualisieren (GitHub Releases)
+Im Smartphone-Menü **App aktualisieren → Nach Updates suchen** wählen. Die App
+liest die öffentliche Datei `downloads/alfonso-update.json` im main-Zweig dieses
+Repositorys. Sie zeigt Version und Änderungen an. **Herunterladen und installieren**
+lädt die dort ausdrücklich angegebene APK über Androids DownloadManager. Eine
+veröffentlichte GitHub-Release-Seite oder ein zusätzlicher Upload-Token ist nicht
+mehr erforderlich. Keine GitHub Actions und keine Zugangsdaten in der App.
 
-Im Drei-Punkte-Menü der Smartphone-Übersicht **App aktualisieren** öffnen und
-**Nach Updates suchen** drücken. Die Seite zeigt installierte und veröffentlichte
-Version als kurze Versionsnummer sowie Release-Änderungen. **Herunterladen und
-installieren** lädt die APK mit Fortschritt über Androids DownloadManager; der
-Download bleibt bei Bildschirmwechsel und Prozessende erhalten. Abbrechen ist
-möglich. Anschließend werden Größe, SHA-256, Paket, höhere Versionsnummer und
-kryptografische APK-Signatur geprüft. Nur eine geprüfte private Dateikopie wird
-über einen eng begrenzten FileProvider an den Android-Paketinstaller übergeben.
-Falls erforderlich **Installation durch Alfonso erlauben** öffnen und Androids
-„Aus dieser Quelle zulassen“ aktivieren. Nach Rückkehr wird erneut geprüft und
-die Installation fortgesetzt. Bei Abbruch kann sie erneut aufgerufen werden.
-Es gibt keine stille Installation, Deinstallation oder Datenrücksetzung.
+**Einmalige Umstellung:** Versionen 16 und 17 kennen ausschließlich GitHub Releases.
+Sie können diesen neuen Updateweg nicht selbst erkennen. Alfonso 18 einmal über
+die APK installieren, ohne vorherige Deinstallation. Ab Version 18 funktioniert
+die Suche über die Repository-Dateien. APK-Name und sichtbare Version bleiben kurz.
+Die interne Android-Versionsnummer wird weiterhin strikt erhöht.
 
-Quelle ist der neueste reguläre veröffentlichte Release von
-`parip69/Haus-Sprachsteuerung` (`GET /repos/parip69/Haus-Sprachsteuerung/releases/latest`).
-Entwürfe und Vorabversionen werden ausgeschlossen. Ohne Release erscheint
-„Noch kein Update veröffentlicht“. Das API-`latest` ist nach GitHub-Regeln der
-aktuelle stabile Release: zukünftige Veröffentlichungen deshalb auch als neuesten
-Release kennzeichnen. Tags und Dateinamen werden nicht als Versionszahlen geparst.
-Die App verwendet die tatsächliche `browser_download_url` des APK-Assets.
-Private Repositories/Assets sind ohne Anmeldung nicht als öffentliche Updatequelle
-nutzbar; ein GitHub-404 kann auch ein verborgenes privates Repository bedeuten.
-Keine Tokens in die App aufnehmen. Keine GitHub Actions oder zusätzlichen Dienste
-sind nötig. Die App benötigt Internetzugriff auf `api.github.com`, `github.com`
-und die von GitHub verwendeten Release-Downloadhosts.
+Nur Metadaten mit `channel: stable` werden angeboten; Vorabstände nicht in diese
+Datei eintragen. Der numerische versionCode wird mit der installierten App verglichen.
+Downloadadresse, Dateigröße, SHA-256, Application-ID, versionName, versionCode und
+kryptografische APK-Signatur werden geprüft. Nur eine geprüfte private Kopie wird
+über einen eng begrenzten FileProvider an Android übergeben. Bei Bedarf
+**Installation durch Alfonso erlauben** öffnen und „Aus dieser Quelle zulassen“
+aktivieren. Nach Rückkehr wird erneut geprüft; abgebrochene Installation kann
+fortgesetzt werden. Einstellungen und Verlauf werden nicht zurückgesetzt.
 
-### Künftigen Release erstellen
+### Neue Version bereitstellen
 
-1. In `app/build.gradle.kts` den **versionCode strikt erhöhen** und versionName
-   anpassen. Application-ID und `projectKey` unverändert lassen. Der App-Name bleibt
-   **Alfonso**, damit „OK Google, öffne Alfonso“ weiterhin derselbe Aufruf bleibt.
-   Die Zuordnung durch Google/Gemini muss auf dem Handy getestet werden.
-2. Mit JDK 17 und SDK 35 lokal oder in Codex bauen:
+1. In `app/build.gradle.kts` versionCode erhöhen und kurze versionName anpassen.
+   Application-ID und ursprünglichen projectKey unverändert lassen.
+2. Mit JDK 17 / SDK 35 bauen und prüfen:
    `./gradlew assembleDebug assembleRelease testDebugUnitTest lintDebug signingReport`.
-   Die Updater-Tests prüfen auch die echte signierte Release-APK und manipulierte
-   bzw. abgeschnittene Kopien. Daher baut die JVM-Testaufgabe ebenfalls Release.
-3. `ANDROID_HOME` setzen und mit Python 3.11+ `python3 scripts/prepare-release.py`
-   ausführen. Das Skript prüft per `apksigner` und `aapt` Signatur, Paket und Version
-   gegen die Build-Konfiguration und erzeugt unter `app/build/outputs/github-release/`
-   `Alfonso-<letzte Versionsnummer>.apk` (aktuell `Alfonso-17.apk`) und `alfonso-update.json`.
-4. Beide geprüften Dateien zusammen mit Änderungsbeschreibung an einen regulären
-   GitHub Release hängen, etwa Tag `v17`, Titel `Alfonso 17`.
-   Erst mit beiden Assets veröffentlichen; vorhandene Release-Dateien nicht unter
-   derselben Version austauschen. Für spätere Updates immer einen neuen Release
-   und höheren versionCode verwenden. SHA-256 ist eine Integritätsprüfung;
-   die feste APK-Signatur schützt zusätzlich gegen fremde APKs.
-5. Auf einem Handy mit älterer Alfonso-Version Update, Freigaberückkehr,
-   Installationsabbruch und Erhalt von Einstellungen/Verlauf prüfen. Die erste
-   Installation dieser Updater-Version erfolgt noch durch Öffnen der APK.
+   Tests verwenden auch die echte signierte Release-APK und beschädigte Kopien.
+3. Änderungsbeschreibung in `docs/releases/<versionName>.md` schreiben.
+4. `ANDROID_HOME` setzen und `python3 scripts/prepare-release.py` ausführen
+   (Python 3.11+). Das Skript prüft mit apksigner/aapt Paket, Signatur und Version
+   und erzeugt APK und Metadaten unter `app/build/outputs/github-release/`.
+5. Beide geprüften Dateien nach `downloads/` kopieren und gemeinsam auf main
+   committen und pushen. `alfonso-update.json` zeigt auf die neueste stabile APK.
+   Ältere APKs mit anderem Namen erhalten; veröffentlichte APKs nicht austauschen.
+   APK und Metadaten gemeinsam pushen, damit kein halbfertiges Update angeboten wird.
+6. Öffentliche Metadaten und APK wieder herunterladen, Prüfsumme und Signatur prüfen.
+   Handyinstallation und Erhalt von Einstellungen/Verlauf separat testen.
 
-Metadatenschema des Release-Assets `alfonso-update.json`:
+Metadaten enthalten `applicationId`, `versionCode`, `versionName`, `apkFileName`,
+`sha256`, `size`, `downloadUrl`, `notes` und `channel: stable`. Die Downloadadresse
+muss exakt auf die benannte APK in diesem Repository unter `main/downloads/` zeigen.
+Für Anfragen ist nur `raw.githubusercontent.com` nötig; jede manuelle Suche liest
+frische Metadaten mit Cache-Vermeidung. Die Originalsignatur bleibt unabhängig
+von den Metadaten fest vorgegeben.
 
-```json
-{
-  "applicationId": "de.parip69.homesprachsteuerung",
-  "versionCode": 28,
-  "versionName": "17",
-  "apkFileName": "Alfonso-17.apk",
-  "sha256": "<64 Hex-Zeichen, vom Vorbereitungsskript berechnet>"
-}
-```
-
-Als Vorbilder wurden die zugänglichen nativen Updater in
-`parip69/RechenGuruLGI_AndroidAPK` (DownloadManager, Wiederaufnahme, Android-Freigabe)
-und `parip69/BarcodeAudi_AndroidAPK` (Installer/FileProvider) geprüft. Deren
-versionsabhängig konstruierte Downloadadressen wurden für Alfonso nicht übernommen.
-Im geprüften Stand von `parip69/Blitz_lesen_Isabella_AndroidAPK` wurde kein
-vergleichbarer nativer Kotlin-Updater gefunden; keine Funktionsgleichheit zugesagt.
+Vorbildquellen: `parip69/BarcodeAudi_AndroidAPK` (direkte Repository-APK,
+FileProvider/Installer) und `parip69/RechenGuruLGI_AndroidAPK` (GitHub-Pages-APK,
+DownloadManager und Android-Freigabe). In der geprüften Lese-App
+`parip69/Blitz_lesen_Isabella_AndroidAPK` wurde kein gleichwertiger nativer
+Kotlin-Updater gefunden; keine Gleichheit behauptet.
 
 ## Fester Signierschlüssel – wichtig für VS Code und Codex
 

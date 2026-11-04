@@ -72,11 +72,16 @@ class UpdatePolicyTest {
             f.writeBytes(byteArrayOf()); rejects { UpdatePolicy.verifyFile(f, 0, sha) }
         } finally { f.delete() }
     }
-    private fun source(status: Int = 200, offline: Boolean = false) = UpdateSource(OkHttpClient.Builder()
+    private fun manifest() = JSONObject(metadata().json()).put("channel", "stable").put("size", 123)
+        .put("downloadUrl", REPOSITORY_DOWNLOADS + metadata().apkFileName).put("notes", "Updatefunktion")
+    private fun source(status: Int = 200, offline: Boolean = false, body: String = manifest().toString()) = UpdateSource(OkHttpClient.Builder()
         .addInterceptor { chain ->
             if (offline) throw IOException("offline")
             val req = chain.request()
-            val body = if (req.url.host == "api.github.com") release() else metadata().json()
+            assertEquals("raw.githubusercontent.com", req.url.host)
+            assertEquals("/parip69/Haus-Sprachsteuerung/main/downloads/alfonso-update.json", req.url.encodedPath)
+            assertNotNull(req.url.queryParameter("check"))
+            assertEquals("no-cache, no-store", req.header("Cache-Control"))
             Response.Builder().request(req).protocol(okhttp3.Protocol.HTTP_1_1).code(status).message("test")
                 .body(body.toResponseBody()).build()
         }.build())
@@ -88,6 +93,19 @@ class UpdatePolicyTest {
         assertNull(source(404).latest(25))
         for (status in listOf(403, 429, 500)) rejects { source(status).latest(25) }
         rejects { source(offline = true).latest(25) }
+    }
+    @Test fun repositoryManifestRequiresStableChannelAndValidDownload() {
+        assertNull(source(body = manifest().put("channel", "preview").toString()).latest(25))
+        assertNull(source(body = manifest().put("channel", "draft").toString()).latest(25))
+        for (url in listOf("http://evil.example/app.apk", "https://raw.githubusercontent.com/other/repo/main/a.apk",
+            REPOSITORY_DOWNLOADS + "wrong.apk", REPOSITORY_DOWNLOADS + metadata().apkFileName + "?x=1")) {
+            rejects { source(body = manifest().put("downloadUrl", url).toString()).latest(25) }
+        }
+        for (size in listOf(0L, -1L, MAX_APK_BYTES + 1)) {
+            rejects { source(body = manifest().put("size", size).toString()).latest(25) }
+        }
+        rejects { source(body = "not json").latest(25) }
+        rejects { source(body = "x".repeat(65537)).latest(25) }
     }
     @Test fun realSignedApkPassesAndDamagedApksFail() {
         val apk = File(requireNotNull(System.getProperty("alfonso.testApk")))
