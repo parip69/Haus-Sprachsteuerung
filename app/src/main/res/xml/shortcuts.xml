@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut android:shortcutId="history" android:enabled="true"
+        android:icon="@drawable/ic_history"
+        android:shortcutShortLabel="@string/history_shortcut_short"
+        android:shortcutLongLabel="@string/history_shortcut_long">
+        <intent android:action="de.parip69.homesprachsteuerung.VIEW_HISTORY"
+            android:targetPackage="de.parip69.homesprachsteuerung"
+            android:targetClass="de.parip69.homesprachsteuerung.MainActivity" />
+    </shortcut>
+</shortcuts>

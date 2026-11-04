@@ -1,5 +1,20 @@
 # Alfonso 1.1.14-auto-test
 
+## Fester Signierschlüssel – wichtig für VS Code und Codex
+
+**Für alle weiteren APKs denselben vorhandenen Schlüssel verwenden.**
+Die verbindlichen KI-Anweisungen stehen direkt in [AGENTS.md](AGENTS.md).
+
+- Keystore: [signing/home-sprachsteuerung.jks](signing/home-sprachsteuerung.jks)
+- Signing-Konfiguration: [signing/signing.properties](signing/signing.properties)
+- Fingerabdruck und Details: [signing/SIGNATUR.md](signing/SIGNATUR.md)
+- Debug und Release sind bereits in `app/build.gradle.kts` an diesen Schlüssel gebunden.
+- Application-ID: `de.parip69.homesprachsteuerung`.
+
+Den Repository-Hauptordner in VS Code öffnen. Signatur mit
+`./gradlew signingReport` beziehungsweise unter Windows mit
+`.\gradlew.bat signingReport` prüfen. Keinen neuen Keystore erzeugen.
+
 Privater Android-Auto-IoT-Prototyp: siehe [ANDROID_AUTO.md](ANDROID_AUTO.md).
 Die Smartphone-Funktionen bleiben erhalten. Auto-Spracheingabe hängt vom Host ab;
 DHU- und Fahrzeugbetrieb sind bisher nicht nachgewiesen.

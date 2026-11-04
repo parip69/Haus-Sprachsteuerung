@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:background="#101419">
+    <com.google.android.material.appbar.MaterialToolbar android:id="@+id/toolbar"
+        android:layout_width="match_parent" android:layout_height="wrap_content" app:title="@string/settings"
+        app:navigationIcon="@drawable/ic_back" app:navigationContentDescription="@string/back" />
+    <ScrollView android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="20dp" android:orientation="vertical">
+            <com.google.android.material.materialswitch.MaterialSwitch android:id="@+id/voiceEntry"
+                android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/voice_entry" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp" android:text="@string/voice_entry_note" android:textSize="12sp" />
+            <com.google.android.material.materialswitch.MaterialSwitch android:id="@+id/voiceFeedback"
+                android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/voice_feedback" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp" android:text="@string/voice_feedback_note" android:textSize="12sp" />
+            <com.google.android.material.materialswitch.MaterialSwitch android:id="@+id/speechFeedback"
+                android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/speech_feedback" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp" android:text="@string/speech_feedback_note" android:textSize="12sp" />
+            <com.google.android.material.materialswitch.MaterialSwitch android:id="@+id/speakCommand"
+                android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/speak_command" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp" android:text="@string/speak_command_note" android:textSize="12sp" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:text="@string/speech_times" android:textSize="20sp" />
+            <com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:hint="@string/initial_wait">
+                <com.google.android.material.textfield.TextInputEditText android:id="@+id/initialWait" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="number" android:singleLine="true" android:importantForAutofill="no" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:hint="@string/speech_pause">
+                <com.google.android.material.textfield.TextInputEditText android:id="@+id/speechPause" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="number" android:singleLine="true" android:importantForAutofill="no" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:hint="@string/maximum_speech">
+                <com.google.android.material.textfield.TextInputEditText android:id="@+id/maximumSpeech" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="number" android:singleLine="true" android:importantForAutofill="no" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:layout_marginBottom="20dp" android:text="@string/speech_times_note" android:textSize="12sp" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/target" android:labelFor="@id/modeSpinner" />
+            <Spinner android:id="@+id/modeSpinner" android:layout_width="match_parent" android:layout_height="56dp" />
+            <LinearLayout android:id="@+id/fibaroFields" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:text="@string/fibaro_connection" android:labelFor="@id/connectionSpinner" />
+                <Spinner android:id="@+id/connectionSpinner" android:layout_width="match_parent" android:layout_height="56dp" />
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/connection_note" android:textSize="12sp" />
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="24dp" android:text="@string/local_profile" android:textSize="20sp" />
+            <com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:hint="@string/local_url">
+                <com.google.android.material.textfield.TextInputEditText android:id="@+id/fibaroUrl" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="textUri" android:maxLines="1" android:singleLine="true" android:importantForAutofill="no" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:hint="@string/local_user">
+                <com.google.android.material.textfield.TextInputEditText android:id="@+id/fibaroUser" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="text" android:maxLines="1" android:singleLine="true" android:importantForAutofill="no" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:hint="@string/local_password" app:endIconMode="password_toggle">
+                <com.google.android.material.textfield.TextInputEditText android:id="@+id/fibaroPassword" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="textPassword" android:maxLines="1" android:singleLine="true" android:importantForAutofill="no" />
+            </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.button.MaterialButton android:id="@+id/testLocalConnection" style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:text="@string/test_local_connection" />
+                <TextView android:id="@+id/localConnectionResult" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/test_local_note" android:textIsSelectable="true" android:accessibilityLiveRegion="polite" />
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="24dp" android:text="@string/public_profile" android:textSize="20sp" />
+            <com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:hint="@string/public_url">
+                <com.google.android.material.textfield.TextInputEditText android:id="@+id/publicFibaroUrl" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="textUri" android:maxLines="1" android:singleLine="true" android:importantForAutofill="no" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/public_address_note" android:textSize="12sp" />
+            <com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:hint="@string/public_user">
+                <com.google.android.material.textfield.TextInputEditText android:id="@+id/publicFibaroUser" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="text" android:maxLines="1" android:singleLine="true" android:importantForAutofill="no" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:hint="@string/public_password" app:endIconMode="password_toggle">
+                <com.google.android.material.textfield.TextInputEditText android:id="@+id/publicFibaroPassword" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="textPassword" android:maxLines="1" android:singleLine="true" android:importantForAutofill="no" />
+            </com.google.android.material.textfield.TextInputLayout>
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:text="@string/public_note" android:textSize="12sp" />
+                <com.google.android.material.button.MaterialButton android:id="@+id/testConnection" style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:text="@string/test_public_connection" />
+                <TextView android:id="@+id/connectionResult" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/test_public_note" android:textIsSelectable="true" android:accessibilityLiveRegion="polite" />
+            <com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:hint="@string/variable">
+                <com.google.android.material.textfield.TextInputEditText android:id="@+id/variable" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="text" android:maxLines="1" android:singleLine="true" android:importantForAutofill="no" />
+            </com.google.android.material.textfield.TextInputLayout>
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:text="@string/fibaro_note" />
+                <com.google.android.material.materialswitch.MaterialSwitch android:id="@+id/invokeScenes" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:text="@string/invoke_scenes" />
+            </LinearLayout>
+            <LinearLayout android:id="@+id/mqttFields" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:visibility="gone">
+<com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:hint="@string/broker_uri">
+ <com.google.android.material.textfield.TextInputEditText android:id="@+id/brokerUri" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="textUri" android:maxLines="1" android:singleLine="true" android:importantForAutofill="no" />
+ </com.google.android.material.textfield.TextInputLayout><com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:hint="@string/port">
+ <com.google.android.material.textfield.TextInputEditText android:id="@+id/port" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="number" android:maxLines="1" android:singleLine="true" android:importantForAutofill="no" />
+ </com.google.android.material.textfield.TextInputLayout><com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:hint="@string/client_id">
+ <com.google.android.material.textfield.TextInputEditText android:id="@+id/clientId" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="text" android:maxLines="1" android:singleLine="true" android:importantForAutofill="no" />
+ </com.google.android.material.textfield.TextInputLayout><com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:hint="@string/topic">
+ <com.google.android.material.textfield.TextInputEditText android:id="@+id/topic" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="text" android:maxLines="1" android:singleLine="true" android:importantForAutofill="no" />
+ </com.google.android.material.textfield.TextInputLayout><com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:hint="@string/mqtt_username">
+ <com.google.android.material.textfield.TextInputEditText android:id="@+id/mqttUser" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="text" android:maxLines="1" android:singleLine="true" android:importantForAutofill="no" />
+ </com.google.android.material.textfield.TextInputLayout><com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:hint="@string/mqtt_password" app:endIconMode="password_toggle">
+ <com.google.android.material.textfield.TextInputEditText android:id="@+id/mqttPassword" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="textPassword" android:maxLines="1" android:singleLine="true" android:importantForAutofill="no" />
+ </com.google.android.material.textfield.TextInputLayout>
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:text="@string/mqtt_note" />
+            </LinearLayout>
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="24dp" android:text="@string/settings_note" android:textSize="12sp" />
+            <TextView android:id="@+id/errorText" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:visibility="gone" android:textColor="#FFB4AB" android:accessibilityLiveRegion="polite" />
+            <com.google.android.material.button.MaterialButton android:id="@+id/saveButton" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="20dp" android:text="@string/save" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

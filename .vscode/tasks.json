@@ -1,0 +1,57 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Android: Test-APK bauen",
+      "type": "shell",
+      "command": "./gradlew assembleDebug",
+      "windows": {
+        "command": ".\\gradlew.bat assembleDebug"
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Android: Release-APK bauen",
+      "type": "shell",
+      "command": "./gradlew assembleRelease",
+      "windows": {
+        "command": ".\\gradlew.bat assembleRelease"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Android: APK mit Sprachwellen-Icon",
+      "type": "shell",
+      "command": "./gradlew assembleRelease -PiconVariant=sprachwelle",
+      "windows": {
+        "command": ".\\gradlew.bat assembleRelease -PiconVariant=sprachwelle"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Android: Tests und Lint",
+      "type": "shell",
+      "command": "./gradlew testDebugUnitTest lintDebug",
+      "windows": {
+        "command": ".\\gradlew.bat testDebugUnitTest lintDebug"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "GitHub holen",
+      "type": "shell",
+      "command": "git pull --ff-only",
+      "problemMatcher": []
+    },
+    {
+      "label": "GitHub hochladen",
+      "type": "shell",
+      "command": "git push",
+      "problemMatcher": []
+    }
+  ]
+}

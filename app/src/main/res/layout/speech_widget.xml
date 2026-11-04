@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:padding="0dp" android:background="@android:color/transparent">
+    <ImageButton android:id="@+id/widgetStart"
+        android:layout_width="56dp" android:layout_height="56dp"
+        android:layout_gravity="center" android:padding="13dp"
+        android:src="@drawable/ic_widget_capture" android:scaleType="fitCenter"
+        android:background="@drawable/widget_background"
+        android:contentDescription="@string/widget_start" />
+</FrameLayout>

@@ -1,0 +1,18 @@
+<resources>
+    <style name="Theme.HomeVoice" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="colorPrimary">#A7D8FF</item>
+        <item name="colorOnPrimary">#00324F</item>
+        <item name="colorSecondary">#B9EBD3</item>
+        <item name="android:windowBackground">#101419</item>
+        <item name="android:fontFamily">sans</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:colorAccent">#A7D8FF</item>
+    </style>
+    <style name="Theme.HomeVoice.Capture" parent="Theme.Material3.Dark.Dialog">
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowDisablePreview">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowCloseOnTouchOutside">false</item>
+    </style>
+</resources>

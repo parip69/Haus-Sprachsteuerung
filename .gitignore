@@ -1,0 +1,7 @@
+.gradle/
+.idea/
+**/build/
+local.properties
+*.iml
+# Fixed project signing key is intentionally included at the user’s request.
+.DS_Store
