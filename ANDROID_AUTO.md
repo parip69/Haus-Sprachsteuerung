@@ -1,4 +1,17 @@
-# Alfonso – privater Android-Auto-Prototyp 1.1.14-auto-test
+# Alfonso – Android-Auto-Prototyp und Gerätediagnose
+
+**Aktueller Nachweis vom 04.11.2026:** Die unveränderte Alfonso 18 (29)
+erscheint im offiziellen DHU im Launcher und öffnet ihre Startseite. Android
+Auto bindet ihren CarAppService erfolgreich. Nach Ende des DHU-Tests und einem
+frischen normalen Host-Start fehlt Alfonso wieder unter „Launcher anpassen“;
+`CAR.VALIDATOR` protokolliert `Package DENIED; failed all other checks`.
+Die Host-Vertrauens-/Zulassungsprüfung ist damit als Ausblendungsgrund belegt.
+Die genaue interne Teilprüfung nennt die Meldung nicht. Einzelheiten und
+verbleibende Voraussetzungen stehen im Diagnoseabschnitt am Ende.
+
+Die folgenden Prototyp-Angaben und die ursprüngliche Testtabelle dokumentieren
+den früheren Stand 1.1.14-auto-test. Der aktuelle DHU-Nachweis umfasst weder
+Spracheingabe/Befehlsversand noch einen Fahrzeugtest.
 
 ## Ergebnis und Grenze
 
@@ -89,3 +102,123 @@ Die APK bleibt für das Smartphone gebaut; Paketkennung, Signatur und bisherige 
 - Erkenner-Audioquelle: https://developer.android.com/reference/android/speech/RecognizerIntent#EXTRA_AUDIO_SOURCE
 - DHU: https://developer.android.com/training/cars/testing/dhu
 - Fahrzeug und vertrauenswürdige Installation: https://developer.android.com/training/cars/testing
+
+## Gerätediagnose vom 04.11.2026
+
+Dieser Abschnitt beschreibt den aktuellen Prüfstand; die älteren Angaben oben
+beziehen sich auf den ursprünglichen Prototyp und dessen damalige Umgebung.
+
+- Ausgangscommit `a359478`, `main` nach `git fetch origin` und
+  `git merge --ff-only origin/main` aktuell. Bestehende lokale Änderungen an
+  `gradlew`, `gradlew.bat`, `gradle/wrapper/gradle-wrapper.jar` und
+  `gradle/wrapper/gradle-wrapper.properties` bleiben erhalten.
+- Aktueller Quellstand: Alfonso 19 / versionCode 30, Application-ID unverändert.
+  Beide Build-Typen verwenden weiterhin `projectKey` / Alias `homevoice`.
+  Die vorhandene `downloads/Alfonso-19.apk` besteht `apksigner verify`; ihr
+  Zertifikat entspricht dem in AGENTS.md festgelegten SHA-256-Fingerabdruck.
+  Die Update-Metadaten unter `downloads/alfonso-update.json` bleiben unverändert.
+- Manifest, Service, Session und Screens geprüft: exportierter CarAppService,
+  offizielle Action und IOT-Kategorie, `template`-Beschreibung, Mindest-Car-API 6,
+  `app` und `app-projected` jeweils 1.7.0. PaneTemplate und SearchTemplate sind
+  laut offizieller Template-Tabelle für IoT zulässig. Kein bisher nachgewiesener
+  Konfigurationsfehler erklärt das fehlende Launcher-Symbol.
+- Release prüft Host-Signaturen mit der Bibliotheks-Allowlist; Debug verwendet
+  die offizielle Entwicklungsvalidierung. Die installierte Alfonso 18 ist kein
+  Debug-Build. Ihr Service akzeptiert den echten Android-Auto-Host im DHU-Test.
+  `HostConfig` meldet Bibliothek 1.7.0, App-Minimum 6, App-Maximum 8 sowie
+  Host-Minimum 1 und Host-Maximum 8. Keine API-Unverträglichkeit im geprüften
+  Startablauf festgestellt.
+- Vorhandenes SDK: `C:\AndroidSDK`, JDK 17, SDK Platform 35, Build-Tools 35.0.0,
+  adb 37.0.0. Offizielles Paket `extras;google;auto` ergänzt; DHU 2.0 für Windows
+  lässt sich mit `--version` aufrufen. DHU-Verbindung und App-Start anschließend
+  erfolgreich durchgeführt, siehe Vergleich unten.
+- Lokale Prüfung des unveränderten App-Codes mit dem vorhandenen Gradle 8.11.1
+  und `ANDROID_HOME=C:\AndroidSDK`: `assembleDebug testDebugUnitTest lintDebug
+  signingReport` erfolgreich; der Testtask baut zusätzlich die Release-APK.
+  92 JVM-Tests, 0 Fehler, 0 übersprungen. Lint: 66 Warnungen, keine Fehler.
+  `signingReport` sowie `apksigner verify --print-certs` für beide neu gebauten
+  APKs bestätigen die vorgegebene Identität. Debug-APK-Paket und Version mit
+  aapt bestätigt: `de.parip69.homesprachsteuerung`, 19 / 30. Keine neue Version
+  ausgegeben, keine APK installiert oder veröffentlicht. Der bestehend geänderte
+  Wrapper wird für diese Prüfung nicht benutzt: Seine Distributionsadresse nennt
+  9.7.1, während die eingetragene Prüfsumme gegenüber dem 8.11.1-Ausgangsstand
+  unverändert ist. Diese lokale Build-Konfiguration erklärt keinen Gerätefehler.
+- adb zunächst `unauthorized`, nach Bestätigung am Handy `device`.
+  Gerät SM-S928B, Android 17 / API 37, aktiver Benutzer 0.
+- Installiert: Alfonso 18 / 29, Android Auto 18.0.664244-release / 180664244.
+  Alfonso ist für Benutzer 0 installiert, nicht verborgen, suspendiert,
+  angehalten oder deaktiviert; keine deaktivierten Alfonso-Komponenten gefunden.
+  Die normale PackageManager-Abfrage nach Action und IOT-Kategorie liefert
+  `.car.AlfonsoCarAppService`.
+- Installationsquelle: `com.google.android.packageinstaller`, auslösender
+  Paketinstaller ebenfalls dieser, Ursprung `com.android.chrome`.
+  Die installierte APK wurde nur zum lokalen Signaturvergleich ausgelesen:
+  versionName 18, versionCode 29, Originalzertifikat gemäß AGENTS.md;
+  SHA-256 der Datei `0abb349417ac381f8e0cac0c5956fa122fc39a5c3acb75ea46bd467f5d3b5af7`.
+  Sie ist bytegleich mit `downloads/Alfonso-18.apk`.
+- Android-Auto-Entwicklermodus aktiv. „Unbekannte Quellen“ im aktuellen UI
+  **ausgeschaltet**; kein Umschalten vorgenommen. Play-Protect-Prüfung ist
+  keine Android-Auto-Freigabe.
+
+### Kontrollierter Vergleich am unveränderten Handy
+
+| Zustand | Konkreter Befund |
+|---|---|
+| Normaler Host, vor DHU | PackageManager findet den Service, aber `CAR.VALIDATOR` meldet für Alfonso `Package DENIED; failed all other checks`. Direkt davor: `Finsky / PlayGearheadService de.parip69.homesprachsteuerung, app owners empty`. |
+| Erste DHU-Verbindungsversuche | Zunächst Protokollabbruch; beim Wiederverbinden Absturz von `com.google.android.projection.gearhead:projection` mit `IllegalStateException: Already connected` in `DeveloperHeadUnitNetworkService`. Kein Alfonso-Absturz. |
+| Frischer Host, offizielle DHU-Verbindung | Android Auto für Benutzer 0 ohne Datenlöschung beendet und neu geöffnet; Head-Unit-Server über sein offizielles Menü gestartet, adb-Tunnel 5277, eine DHU-Instanz. Protokoll 1.7 und TLS erfolgreich. Android-Auto-Oberfläche angezeigt. |
+| DHU-Launcher und Smartphone-Liste | Meldung „Alfonso verfügbar“, Alfonso im Auto-Launcher und in „Launcher anpassen“ sichtbar; dort Häkchen gesetzt. Keine Häkchen geändert. |
+| Alfonso im DHU geöffnet | Sichtbare Startseite „Alfonso“, „Bereit“, „Spracheingabe über die Auto-Eingabe“, Aktion „Spracheingabe“. `dumpsys activity services` bestätigt Binder-Verbindung von `com.google.android.projection.gearhead:projection` zum AlfonsoCarAppService. Host-API 1–8 und App-API 6–8 kompatibel. |
+| Zurück zum normalen Host | DHU beendet, Head-Unit-Server gestoppt, Tunnel entfernt; Android Auto ohne Datenlöschung frisch geöffnet. In alphabetischer Liste folgt auf „Beenden“ direkt „Einstellungen“: Alfonso fehlt wieder. Erneut mehrere `CAR.VALIDATOR: Package DENIED` für Alfonso. Kein aktiver Alfonso-Service mehr. |
+
+**Einordnung:** Die normale Android-Auto-Hostprüfung lehnt das Paket ab, während
+der offizielle DHU-Entwicklungstest dieselbe unveränderte, ursprünglich signierte
+Installation erfolgreich anzeigt und verbindet. Damit sind ein fehlender
+Manifest-Eintrag, eine grundsätzliche Host-/API-Unverträglichkeit oder ein
+Startseitenfehler als Erklärung dieses Unterschieds nicht belegt. Ein
+Vertrauens-/Verteilungsproblem ist durch den Vergleich und `app owners empty`
+stark gestützt. Die genaue interne Ablehnungsregel bleibt hinter der generischen
+Host-Meldung verborgen; eine fehlende Play-Eigentümerzuordnung allein wird
+deshalb nicht als vollständig bewiesene Einzelursache behauptet.
+
+### Verbleibende Voraussetzung und Grenzen
+
+Google verlangt für reale Fahrzeuge eine vertrauenswürdige Installationsquelle;
+„Unbekannte Quellen“ gilt ausdrücklich nicht für Car-App-Library-Apps. Der
+offizielle weitere Weg ist eine passende vertrauenswürdige Verteilung, etwa ein
+Google-Play-Testtrack mit Android-Auto-Unterstützung, und anschließend ein echter
+Fahrzeugtest. Ein Play-Console-Entwicklerkonto und die dortigen Voraussetzungen
+wären dafür nötig. Für diese Verteilung muss der vorhandene Schlüssel auch als
+Play-App-Signierschlüssel erhalten bleiben; Google unterstützt die sichere
+Übernahme eines vorhandenen Schlüssels. Keine automatische neue Signatur wählen.
+
+**Internal App Sharing ist für ein Update der vorhandenen Installation nicht
+gleichwertig:** Google signiert diese Downloads automatisch mit einem separaten
+Internal-App-Sharing-Schlüssel. Deshalb diesen Weg nicht ungeprüft als
+datenbewahrendes Update der hier fest vorgeschriebenen Identität verwenden.
+
+Kein Codefehler nachgewiesen, daher keine Codeänderung und keine neue APK-Version
+ausgegeben. Eine reine Versionsnummernerhöhung beseitigt die beobachtete
+Host-Ablehnung nicht nachweislich. Die bestehenden Repository-Updates bleiben
+unverändert; sie sind für sich keine Android-Auto-Vertrauensfreigabe.
+
+Spracheingabe, Mikrofonangebot, Ein-Tipp-Ablauf, Versand und Fahrzeugbetrieb
+bleiben ungetestet. Es wurde keine Eingabeaktion in Alfonso gewählt und kein
+Hausbefehl ausgelöst. Keine Installation, Deinstallation, Datenlöschung,
+Profiländerung, gefälschte Installationsquelle oder Umgehung von Host-Prüfungen.
+Kein Upload oder Push. Einstellungen, Verlauf und Smartphone-Funktionen wurden
+nicht verändert; ein eigener vollständiger Regressionstest am Handy ist nicht
+Bestandteil dieses reinen Launcher-/Host-Tests.
+
+Aktuell erneut abgeglichene offizielle Quellen:
+
+- https://developer.android.com/training/cars/apps/auto
+- https://developer.android.com/training/cars/apps/iot
+- https://developer.android.com/jetpack/androidx/releases/car-app
+- https://developer.android.com/reference/androidx/car/app/validation/HostValidator
+- https://developers.google.com/cars/design/create-apps/apps-for-drivers/templates/overview
+- https://developer.android.com/training/cars/testing
+- https://developer.android.com/training/cars/testing/dhu
+- https://developer.android.com/training/cars/distribute
+- https://developer.android.com/studio/publish/app-signing
+- https://support.google.com/googleplay/android-developer/answer/9844679

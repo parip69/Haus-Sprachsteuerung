@@ -1,7 +1,11 @@
 .gradle/
+.kotlin/
 .idea/
 **/build/
 local.properties
 *.iml
-# Fixed project signing key is intentionally included at the user’s request.
+# Original signing identity stays local; CI restores it from protected secrets.
+signing/*.jks
+signing/signing.properties
+zertifikat/
 .DS_Store

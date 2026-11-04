@@ -20,8 +20,10 @@ in Visual Studio Code, Codex und Android Studio müssen diese Identität erhalte
 2. Fehlt eine dieser Dateien, zuerst den vorhandenen Originalschlüssel aus dem
    Projekt wiederherstellen. Keinen Ersatzschlüssel erzeugen und keine APK mit
    abweichender Signatur als Update ausgeben.
-3. Keystore und `signing.properties` gehören auf ausdrücklichen Wunsch des
-   Eigentümers zum vollständigen Projekt. Bei ZIP-Export und Migration erhalten.
+3. Keystore und `signing.properties` lokal bei vollständiger Sicherung und
+   Migration erhalten. Im öffentlichen Repository nicht versionieren; der
+   gemeinsame GitHub-Build verwendet die vorhandenen Dateien aus geschützten
+   Secrets `ANDROID_KEYSTORE_BASE64` und `ANDROID_SIGNING_PROPERTIES`.
 4. Passwörter und Schlüsselinhalt nicht in Antworten, Logs oder Dokumentation
    ausgeben. Dokumentation verweist nur auf die Dateien.
 5. Vor Ausgabe einer APK mit `./gradlew signingReport` die Build-Konfiguration

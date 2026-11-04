@@ -1,4 +1,10 @@
-# Alfonso 19
+# Alfonso – interner Testkandidat 20
+
+Version 20 / versionCode 31 ist lokal für den internen Google-Play-Test
+vorbereitet, mit compileSdk/targetSdk 36 und demselben projectKey.
+Die öffentlichen Repository-Updates zeigen weiterhin auf Alfonso 19.
+Noch kein Play-Upload und keine Play-Installation von Version 20.
+Die Vorbereitung und offenen Schritte stehen in [docs/PLAY_INTERN.md](docs/PLAY_INTERN.md).
 
 ## Updates ohne zusätzlichen Token
 
@@ -7,7 +13,7 @@ liest die öffentliche Datei `downloads/alfonso-update.json` im main-Zweig diese
 Repositorys. Sie zeigt Version und Änderungen an. **Herunterladen und installieren**
 lädt die dort ausdrücklich angegebene APK über Androids DownloadManager. Eine
 veröffentlichte GitHub-Release-Seite oder ein zusätzlicher Upload-Token ist nicht
-mehr erforderlich. Keine GitHub Actions und keine Zugangsdaten in der App.
+mehr erforderlich. Die Updatefunktion benötigt keine GitHub Actions und keine Zugangsdaten in der App.
 
 **Einmalige Umstellung:** Versionen 16 und 17 kennen ausschließlich GitHub Releases.
 Sie können diesen neuen Updateweg nicht selbst erkennen. Alfonso 18 einmal über
@@ -32,7 +38,7 @@ Version 19 verwendet denselben neuen Updateweg wie 18.
 
 1. In `app/build.gradle.kts` versionCode erhöhen und kurze versionName anpassen.
    Application-ID und ursprünglichen projectKey unverändert lassen.
-2. Mit JDK 17 / SDK 35 bauen und prüfen:
+2. Mit JDK 17 / SDK Platform 36 bauen und prüfen:
    `./gradlew assembleDebug assembleRelease testDebugUnitTest lintDebug signingReport`.
    Tests verwenden auch die echte signierte Release-APK und beschädigte Kopien.
 3. Änderungsbeschreibung in `docs/releases/<versionName>.md` schreiben.
@@ -64,8 +70,8 @@ Kotlin-Updater gefunden; keine Gleichheit behauptet.
 **Für alle weiteren APKs denselben vorhandenen Schlüssel verwenden.**
 Die verbindlichen KI-Anweisungen stehen direkt in [AGENTS.md](AGENTS.md).
 
-- Keystore: [signing/home-sprachsteuerung.jks](signing/home-sprachsteuerung.jks)
-- Signing-Konfiguration: [signing/signing.properties](signing/signing.properties)
+- Keystore lokal: `signing/home-sprachsteuerung.jks`
+- Signing-Konfiguration lokal: `signing/signing.properties`
 - Fingerabdruck und Details: [signing/SIGNATUR.md](signing/SIGNATUR.md)
 - Debug und Release sind bereits in `app/build.gradle.kts` an diesen Schlüssel gebunden.
 - Application-ID: `de.parip69.homesprachsteuerung`.
@@ -76,7 +82,11 @@ Den Repository-Hauptordner in VS Code öffnen. Signatur mit
 
 Privater Android-Auto-IoT-Prototyp: siehe [ANDROID_AUTO.md](ANDROID_AUTO.md).
 Die Smartphone-Funktionen bleiben erhalten. Auto-Spracheingabe hängt vom Host ab;
-DHU- und Fahrzeugbetrieb sind bisher nicht nachgewiesen.
+Am 04.11.2026 wurden mit der unveränderten Alfonso 18 (29) im offiziellen DHU
+App-Launcher, Service-Verbindung und Startseite erfolgreich geprüft. Im normalen
+Android-Auto-Modus lehnt der Host Alfonso ab; dort fehlt der Launcher-Eintrag.
+Details und Belege stehen in ANDROID_AUTO.md. Spracheingabe, Befehlsversand und
+Fahrzeugbetrieb sind weiterhin nicht nachgewiesen.
 
 Kotlin-App für Android mit deutscher Spracherkennung, dauerhaftem Verlauf,
 Fibaro-REST und MQTT. Projekt für Android Studio und VS Code / Gradle.
@@ -84,7 +94,7 @@ Fibaro-REST und MQTT. Projekt für Android Studio und VS Code / Gradle.
 ## Sofort ausprobieren
 
 1. ZIP entpacken. Den Ordner `Home-Sprachsteuerung` in Android Studio mit **Open** öffnen.
-2. Gradle-JDK **17** einstellen; SDK Platform **35** und Build Tools **35.0.0** installieren lassen.
+2. Gradle-JDK **17** einstellen; SDK Platform **36** und Build Tools **35.0.0** installieren lassen.
 3. Gradle synchronisieren und **Run** mit Deinem Handy als Ziel ausführen.
 4. Der **Testmodus · nur Verlauf** ist bereits aktiviert. Es ist kein Server nötig.
 5. Die Übersicht „Hauspilot“ bleibt offen. Mikrofon antippen, Berechtigung
@@ -197,8 +207,8 @@ Zustellung unklar sein: Vor einem manuellen Wiederholen Ziel oder Topic prüfen.
 
 ## Fester Signierschlüssel – auch in VS Code
 
-Auf ausdrücklichen Wunsch sind **derselbe projektbezogene Schlüssel und seine
-Passwortdatei Bestandteil des Projekts**, für ein privates Repository:
+**Derselbe projektbezogene Schlüssel und seine Passwortdatei bleiben lokal
+Bestandteil des vollständigen Projekts**, außerhalb des öffentlichen Git-Stands:
 
 - `signing/home-sprachsteuerung.jks`
 - `signing/signing.properties`
@@ -206,14 +216,16 @@ Passwortdatei Bestandteil des Projekts**, für ein privates Repository:
 
 **Debug und Release verwenden beide diesen Schlüssel.** Es wird nicht automatisch
 ein gerätespezifischer Android-Debugschlüssel benutzt. Die Dateien werden von
-`.gitignore` nicht ausgeschlossen. Kein Schlüssel eines fremden Projekts wurde übernommen.
+`.gitignore` ausgeschlossen. Der gemeinsame Signierungsworkflow stellt dieselben
+Dateien aus geschützten GitHub-Secrets bereit. Kein Schlüssel eines fremden Projekts wurde übernommen.
 
 Diese Dateien unverändert sichern und bei weiteren Checkouts mitnehmen. Gradle
 liest die Pfade relativ zum Projekt; Rechner und IDE spielen dafür keine Rolle.
 Wer Schlüssel und Passwort hat, kann ebenfalls passende APKs signieren. Das
-Repository deshalb privat halten. Für Updates zusätzlich dieselbe applicationId
+Keystore und Passwortdatei deshalb nicht öffentlich hochladen. Für Updates dieselbe applicationId
 beibehalten und den `versionCode` erhöhen. Die Erstversion ist 1 / 1.0.0.
-Play App Signing kann eine eigene Signatur für Store-Installationen verwenden.
+Play App Signing verwendet laut bestätigtem Import denselben ursprünglichen
+Schlüssel; siehe [signing/SIGNATUR.md](signing/SIGNATUR.md).
 
 ## Bauen und prüfen
 

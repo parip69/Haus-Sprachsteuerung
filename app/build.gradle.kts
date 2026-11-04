@@ -11,13 +11,13 @@ val iconVariant = providers.gradleProperty("iconVariant").orElse("mikrofon").get
 require(iconVariant in setOf("mikrofon", "sprachwelle")) { "iconVariant muss mikrofon oder sprachwelle sein" }
 android {
     namespace = "de.parip69.homesprachsteuerung"
-    compileSdk = 35
+    compileSdk = 36
     defaultConfig {
         applicationId = "de.parip69.homesprachsteuerung"
         minSdk = 26
-        targetSdk = 35
-        versionCode = 30
-        versionName = "19"
+        targetSdk = 36
+        versionCode = 31
+        versionName = "20"
     }
     sourceSets.getByName("main").res.srcDir("src/icons/$iconVariant/res")
     buildFeatures { viewBinding = true }
