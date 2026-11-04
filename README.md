@@ -41,7 +41,7 @@ und die von GitHub verwendeten Release-Downloadhosts.
 3. `ANDROID_HOME` setzen und mit Python 3.11+ `python3 scripts/prepare-release.py`
    ausführen. Das Skript prüft per `apksigner` und `aapt` Signatur, Paket und Version
    gegen die Build-Konfiguration und erzeugt unter `app/build/outputs/github-release/`
-   `Alfonso-<versionName>-<versionCode>.apk` und `alfonso-update.json`.
+   `Alfonso-<letzte Versionsnummer>.apk` (aktuell `Alfonso-15.apk`) und `alfonso-update.json`.
 4. Beide geprüften Dateien zusammen mit Änderungsbeschreibung an einen regulären
    GitHub Release hängen, etwa Tag `v1.1.15`, Titel `Alfonso 1.1.15 (26)`.
    Erst mit beiden Assets veröffentlichen; vorhandene Release-Dateien nicht unter
@@ -59,7 +59,7 @@ Metadatenschema des Release-Assets `alfonso-update.json`:
   "applicationId": "de.parip69.homesprachsteuerung",
   "versionCode": 26,
   "versionName": "1.1.15",
-  "apkFileName": "Alfonso-1.1.15-26.apk",
+  "apkFileName": "Alfonso-15.apk",
   "sha256": "<64 Hex-Zeichen, vom Vorbereitungsskript berechnet>"
 }
 ```

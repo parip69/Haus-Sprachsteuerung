@@ -30,7 +30,8 @@ gradle = (ROOT / "app/build.gradle.kts").read_text()
 assert int(code) == int(re.search(r"versionCode = (\d+)", gradle)[1]), "Build is stale"
 assert version == re.search(r'versionName = "([^"]+)"', gradle)[1], "Build is stale"
 assert re.fullmatch(r"[A-Za-z0-9._-]+", version), "Unsafe version filename"
-name = f"Alfonso-{version}-{code}.apk"
+short_version = version.rsplit(".", 1)[-1]
+name = f"Alfonso-{short_version}.apk"
 out = ROOT / "app/build/outputs/github-release"
 out.mkdir(parents=True, exist_ok=True)
 shutil.copyfile(APK, out / name)
