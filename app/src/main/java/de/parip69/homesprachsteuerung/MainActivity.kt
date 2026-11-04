@@ -68,6 +68,14 @@ class MainActivity : AppCompatActivity() {
             pinSpeechWidget()
             true
         }
+        ui.toolbar.menu.add("App aktualisieren").setOnMenuItemClickListener {
+            autoListenPending = false
+            if (repository.state.value.phase in setOf(Phase.STARTING, Phase.LISTENING)) {
+                startService(Intent(this, CaptureService::class.java).setAction(CaptureService.CANCEL))
+            }
+            startActivity(Intent(this, UpdateActivity::class.java))
+            true
+        }
         clearItem = ui.toolbar.menu.add("Verlauf löschen").apply {
             setOnMenuItemClickListener {
                 MaterialAlertDialogBuilder(this@MainActivity).setTitle("Verlauf löschen?")

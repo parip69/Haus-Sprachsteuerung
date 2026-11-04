@@ -1,4 +1,75 @@
-# Alfonso 1.1.14-auto-test
+# Alfonso 1.1.15
+
+## App aktualisieren (GitHub Releases)
+
+Im Drei-Punkte-Menü der Smartphone-Übersicht **App aktualisieren** öffnen und
+**Nach Updates suchen** drücken. Die Seite zeigt installierte und veröffentlichte
+Version einschließlich versionCode und Release-Änderungen. **Herunterladen und
+installieren** lädt die APK mit Fortschritt über Androids DownloadManager; der
+Download bleibt bei Bildschirmwechsel und Prozessende erhalten. Abbrechen ist
+möglich. Anschließend werden Größe, SHA-256, Paket, höhere Versionsnummer und
+kryptografische APK-Signatur geprüft. Nur eine geprüfte private Dateikopie wird
+über einen eng begrenzten FileProvider an den Android-Paketinstaller übergeben.
+Falls erforderlich **Installation durch Alfonso erlauben** öffnen und Androids
+„Aus dieser Quelle zulassen“ aktivieren. Nach Rückkehr wird erneut geprüft und
+die Installation fortgesetzt. Bei Abbruch kann sie erneut aufgerufen werden.
+Es gibt keine stille Installation, Deinstallation oder Datenrücksetzung.
+
+Quelle ist der neueste reguläre veröffentlichte Release von
+`parip69/Haus-Sprachsteuerung` (`GET /repos/parip69/Haus-Sprachsteuerung/releases/latest`).
+Entwürfe und Vorabversionen werden ausgeschlossen. Ohne Release erscheint
+„Noch kein Update veröffentlicht“. Das API-`latest` ist nach GitHub-Regeln der
+aktuelle stabile Release: zukünftige Veröffentlichungen deshalb auch als neuesten
+Release kennzeichnen. Tags und Dateinamen werden nicht als Versionszahlen geparst.
+Die App verwendet die tatsächliche `browser_download_url` des APK-Assets.
+Private Repositories/Assets sind ohne Anmeldung nicht als öffentliche Updatequelle
+nutzbar; ein GitHub-404 kann auch ein verborgenes privates Repository bedeuten.
+Keine Tokens in die App aufnehmen. Keine GitHub Actions oder zusätzlichen Dienste
+sind nötig. Die App benötigt Internetzugriff auf `api.github.com`, `github.com`
+und die von GitHub verwendeten Release-Downloadhosts.
+
+### Künftigen Release erstellen
+
+1. In `app/build.gradle.kts` den **versionCode strikt erhöhen** und versionName
+   anpassen. Application-ID und `projectKey` unverändert lassen. Der App-Name bleibt
+   **Alfonso**, damit „OK Google, öffne Alfonso“ weiterhin derselbe Aufruf bleibt.
+   Die Zuordnung durch Google/Gemini muss auf dem Handy getestet werden.
+2. Mit JDK 17 und SDK 35 lokal oder in Codex bauen:
+   `./gradlew assembleDebug assembleRelease testDebugUnitTest lintDebug signingReport`.
+   Die Updater-Tests prüfen auch die echte signierte Release-APK und manipulierte
+   bzw. abgeschnittene Kopien. Daher baut die JVM-Testaufgabe ebenfalls Release.
+3. `ANDROID_HOME` setzen und mit Python 3.11+ `python3 scripts/prepare-release.py`
+   ausführen. Das Skript prüft per `apksigner` und `aapt` Signatur, Paket und Version
+   gegen die Build-Konfiguration und erzeugt unter `app/build/outputs/github-release/`
+   `Alfonso-<versionName>-<versionCode>.apk` und `alfonso-update.json`.
+4. Beide geprüften Dateien zusammen mit Änderungsbeschreibung an einen regulären
+   GitHub Release hängen, etwa Tag `v1.1.15`, Titel `Alfonso 1.1.15 (26)`.
+   Erst mit beiden Assets veröffentlichen; vorhandene Release-Dateien nicht unter
+   derselben Version austauschen. Für spätere Updates immer einen neuen Release
+   und höheren versionCode verwenden. SHA-256 ist eine Integritätsprüfung;
+   die feste APK-Signatur schützt zusätzlich gegen fremde APKs.
+5. Auf einem Handy mit älterer Alfonso-Version Update, Freigaberückkehr,
+   Installationsabbruch und Erhalt von Einstellungen/Verlauf prüfen. Die erste
+   Installation dieser Updater-Version erfolgt noch durch Öffnen der APK.
+
+Metadatenschema des Release-Assets `alfonso-update.json`:
+
+```json
+{
+  "applicationId": "de.parip69.homesprachsteuerung",
+  "versionCode": 26,
+  "versionName": "1.1.15",
+  "apkFileName": "Alfonso-1.1.15-26.apk",
+  "sha256": "<64 Hex-Zeichen, vom Vorbereitungsskript berechnet>"
+}
+```
+
+Als Vorbilder wurden die zugänglichen nativen Updater in
+`parip69/RechenGuruLGI_AndroidAPK` (DownloadManager, Wiederaufnahme, Android-Freigabe)
+und `parip69/BarcodeAudi_AndroidAPK` (Installer/FileProvider) geprüft. Deren
+versionsabhängig konstruierte Downloadadressen wurden für Alfonso nicht übernommen.
+Im geprüften Stand von `parip69/Blitz_lesen_Isabella_AndroidAPK` wurde kein
+vergleichbarer nativer Kotlin-Updater gefunden; keine Funktionsgleichheit zugesagt.
 
 ## Fester Signierschlüssel – wichtig für VS Code und Codex
 

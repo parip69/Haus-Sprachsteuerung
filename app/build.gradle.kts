@@ -16,8 +16,8 @@ android {
         applicationId = "de.parip69.homesprachsteuerung"
         minSdk = 26
         targetSdk = 35
-        versionCode = 25
-        versionName = "1.1.14-auto-test"
+        versionCode = 26
+        versionName = "1.1.15"
     }
     sourceSets.getByName("main").res.srcDir("src/icons/$iconVariant/res")
     buildFeatures { viewBinding = true }
@@ -44,6 +44,7 @@ android {
     }
 }
 dependencies {
+    implementation("com.android.tools.build:apksig:8.9.2")
     // Official template API and Android Auto host connection.
     implementation("androidx.car.app:app:1.7.0")
     implementation("androidx.car.app:app-projected:1.7.0")
@@ -61,4 +62,10 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
     testImplementation("org.json:json:20240303")
+}
+
+// Test the actual signed APK, including corrupt-file rejection.
+tasks.withType<org.gradle.api.tasks.testing.Test>().configureEach {
+    dependsOn("assembleRelease")
+    systemProperty("alfonso.testApk", layout.buildDirectory.file("outputs/apk/release/app-release.apk").get().asFile.absolutePath)
 }
