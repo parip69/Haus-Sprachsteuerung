@@ -16,8 +16,8 @@ android {
         applicationId = "de.parip69.homesprachsteuerung"
         minSdk = 26
         targetSdk = 35
-        versionCode = 26
-        versionName = "1.1.15"
+        versionCode = 27
+        versionName = "16"
     }
     sourceSets.getByName("main").res.srcDir("src/icons/$iconVariant/res")
     buildFeatures { viewBinding = true }

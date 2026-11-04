@@ -1,10 +1,14 @@
-# Alfonso 1.1.15
+# Alfonso 16
+
+Die sichtbare Versionsnummer lautet ab jetzt nur **16**, danach **17**, **18** usw.
+Die interne Android-Buildnummer wird für sichere Updates weiter erhöht, aber
+nicht in der Oberfläche angezeigt. APK-Dateiname: `Alfonso-16.apk`.
 
 ## App aktualisieren (GitHub Releases)
 
 Im Drei-Punkte-Menü der Smartphone-Übersicht **App aktualisieren** öffnen und
 **Nach Updates suchen** drücken. Die Seite zeigt installierte und veröffentlichte
-Version einschließlich versionCode und Release-Änderungen. **Herunterladen und
+Version als kurze Versionsnummer sowie Release-Änderungen. **Herunterladen und
 installieren** lädt die APK mit Fortschritt über Androids DownloadManager; der
 Download bleibt bei Bildschirmwechsel und Prozessende erhalten. Abbrechen ist
 möglich. Anschließend werden Größe, SHA-256, Paket, höhere Versionsnummer und
@@ -41,9 +45,9 @@ und die von GitHub verwendeten Release-Downloadhosts.
 3. `ANDROID_HOME` setzen und mit Python 3.11+ `python3 scripts/prepare-release.py`
    ausführen. Das Skript prüft per `apksigner` und `aapt` Signatur, Paket und Version
    gegen die Build-Konfiguration und erzeugt unter `app/build/outputs/github-release/`
-   `Alfonso-<letzte Versionsnummer>.apk` (aktuell `Alfonso-15.apk`) und `alfonso-update.json`.
+   `Alfonso-<letzte Versionsnummer>.apk` (aktuell `Alfonso-16.apk`) und `alfonso-update.json`.
 4. Beide geprüften Dateien zusammen mit Änderungsbeschreibung an einen regulären
-   GitHub Release hängen, etwa Tag `v1.1.15`, Titel `Alfonso 1.1.15 (26)`.
+   GitHub Release hängen, etwa Tag `v16`, Titel `Alfonso 16`.
    Erst mit beiden Assets veröffentlichen; vorhandene Release-Dateien nicht unter
    derselben Version austauschen. Für spätere Updates immer einen neuen Release
    und höheren versionCode verwenden. SHA-256 ist eine Integritätsprüfung;
@@ -57,9 +61,9 @@ Metadatenschema des Release-Assets `alfonso-update.json`:
 ```json
 {
   "applicationId": "de.parip69.homesprachsteuerung",
-  "versionCode": 26,
-  "versionName": "1.1.15",
-  "apkFileName": "Alfonso-15.apk",
+  "versionCode": 27,
+  "versionName": "16",
+  "apkFileName": "Alfonso-16.apk",
   "sha256": "<64 Hex-Zeichen, vom Vorbereitungsskript berechnet>"
 }
 ```

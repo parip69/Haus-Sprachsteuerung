@@ -33,7 +33,7 @@ internal class UpdateViewModel(app: Application) : AndroidViewModel(app) {
     val installedInfo: PackageInfo get() = context.packageManager.getPackageInfo(context.packageName, 0)
     @Suppress("DEPRECATION")
     private fun code(info: PackageInfo) = if (Build.VERSION.SDK_INT >= 28) info.longVersionCode else info.versionCode.toLong()
-    val installedLabel get() = "${installedInfo.versionName} (${code(installedInfo)})"
+    val installedLabel get() = installedInfo.versionName.orEmpty()
     private val file: File get() = File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
         ?: error("Update-Speicher ist nicht verfügbar."), "updates/Alfonso-update.apk")
     private val id get() = prefs.getLong("downloadId", -1)
@@ -47,7 +47,7 @@ internal class UpdateViewModel(app: Application) : AndroidViewModel(app) {
         }
         if (id != -1L) runCatching {
             val meta = UpdateMetadata.parse(prefs.getString("metadata", "")!!)
-            mutable.value = mutable.value.copy(available = "${meta.versionName} (${meta.versionCode})")
+            mutable.value = mutable.value.copy(available = meta.versionName)
         }
     }
 
@@ -61,7 +61,7 @@ internal class UpdateViewModel(app: Application) : AndroidViewModel(app) {
                 mutable.value = if (found == null) UpdateUi(message = "Noch kein Update veröffentlicht") else {
                     val newer = found.first.versionCode > code(installedInfo)
                     UpdateUi(message = if (newer) "Ein Update ist verfügbar." else "Alfonso ist aktuell. Keine neuere Version verfügbar.",
-                        available = "${found.first.versionName} (${found.first.versionCode})", notes = found.third, canDownload = newer)
+                        available = found.first.versionName, notes = found.third, canDownload = newer)
                 }
             } catch (e: Exception) { fail(e, "Updates konnten nicht geprüft werden. Bitte Internetverbindung prüfen.") }
         }
