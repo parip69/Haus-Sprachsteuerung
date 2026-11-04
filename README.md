@@ -1,4 +1,4 @@
-# Alfonso 18
+# Alfonso 19
 
 ## Updates ohne zusätzlichen Token
 
@@ -23,6 +23,10 @@ kryptografische APK-Signatur werden geprüft. Nur eine geprüfte private Kopie w
 **Installation durch Alfonso erlauben** öffnen und „Aus dieser Quelle zulassen“
 aktivieren. Nach Rückkehr wird erneut geprüft; abgebrochene Installation kann
 fortgesetzt werden. Einstellungen und Verlauf werden nicht zurückgesetzt.
+
+Zum direkten Funktionstest: Alfonso 18 einmal manuell installieren, dann über
+**App aktualisieren** Version 19 herunterladen und die Android-Installation bestätigen.
+Version 19 verwendet denselben neuen Updateweg wie 18.
 
 ### Neue Version bereitstellen
 

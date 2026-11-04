@@ -1,11 +1,11 @@
 {
   "applicationId": "de.parip69.homesprachsteuerung",
-  "versionCode": 29,
-  "versionName": "18",
-  "apkFileName": "Alfonso-18.apk",
-  "sha256": "0abb349417ac381f8e0cac0c5956fa122fc39a5c3acb75ea46bd467f5d3b5af7",
+  "versionCode": 30,
+  "versionName": "19",
+  "apkFileName": "Alfonso-19.apk",
+  "sha256": "b348ecc55771ef8a9ef0510a556fd4806d4c66faaf3cbeb9311098b77ec6618c",
   "channel": "stable",
   "size": 7593775,
-  "downloadUrl": "https://raw.githubusercontent.com/parip69/Haus-Sprachsteuerung/main/downloads/Alfonso-18.apk",
-  "notes": "# Alfonso 18\n\nUpdates kommen jetzt direkt aus den \u00f6ffentlich zug\u00e4nglichen Repository-Dateien.\nKein zus\u00e4tzlicher GitHub-Token oder Release-Upload notwendig.\nVersionsvergleich, Dateigr\u00f6\u00dfe, SHA-256, APK-Signatur und Android-Installationsfreigabe bleiben erhalten.\nDie Umstellung muss einmal manuell \u00fcber Alfonso-18.apk installiert werden, weil die alten Versionen ausschlie\u00dflich Releases pr\u00fcfen.\n"
+  "downloadUrl": "https://raw.githubusercontent.com/parip69/Haus-Sprachsteuerung/main/downloads/Alfonso-19.apk",
+  "notes": "# Alfonso 19\n\nPr\u00fcfversion f\u00fcr das direkte Update von Alfonso 18 auf 19 \u00fcber die Repository-Dateien.\nKeine zus\u00e4tzlichen Zugangsdaten oder GitHub-Releases erforderlich.\nPaketkennung, Originalsignatur, Verlauf und Einstellungen bleiben erhalten.\nIn Alfonso 18 \u201eApp aktualisieren \u2192 Nach Updates suchen\u201c w\u00e4hlen, dann \u201eHerunterladen und installieren\u201c.\nAndroid verlangt weiterhin die Best\u00e4tigung der Installation.\n"
 }
