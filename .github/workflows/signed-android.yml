@@ -61,6 +61,48 @@ jobs:
           git rev-parse HEAD >> app/build/outputs/PLAY-VERIFICATION.txt
       - name: Record verification without public binary distribution
         run: cat app/build/outputs/PLAY-VERIFICATION.txt >> "$GITHUB_STEP_SUMMARY"
+      - name: Encrypt verified AAB for private Play transfer
+        env:
+          TRANSFER_CERTIFICATE: |
+            -----BEGIN CERTIFICATE-----
+            MIIEJzCCAo+gAwIBAgIUEZDxXwXOQKkfMNHqU7iwxTLeZNgwDQYJKoZIhvcNAQEL
+            BQAwIzEhMB8GA1UEAwwYQWxmb25zby1Qcml2YXRlLUFydGlmYWN0MB4XDTI2MTEw
+            NDE1MzIzM1oXDTI2MTEwNjE1MzIzM1owIzEhMB8GA1UEAwwYQWxmb25zby1Qcml2
+            YXRlLUFydGlmYWN0MIIBojANBgkqhkiG9w0BAQEFAAOCAY8AMIIBigKCAYEAlQfi
+            aaBl3+i2cNGIGvY4Nw/w+2CwylOhzD/rfWIKS0FrOrxzXZgt6K6ruqfVmuWGRDy+
+            HJNvO+iHlGJJogqm6SuFf09NGnAPJwqBrC7kIr7LHs3oSY+qyWgJWwL+ORsK5IjU
+            M5iiHCb8wQtYBL4JlEv3hLcjLdt2pbf6fJnF3mFT0jFJJu7yrskbyRV2ZCaoP52p
+            h68KLR3fiYw1YeCfEYMvDiumKP6iH1YoOCD40JSbsdSZelwOZqvO6QmYYbJMcDGJ
+            LtFVHeTdexcZSbTSiY+5wxzGgZex/BC7gSf6GnZoNfdulBgcIYW7quMdjxGeDjMC
+            x6+2fE3VLkKAHLLdmPT6C5I5gD+9oEXEaeD+NwU1l/zzr6UdgimAOMGMVey489bJ
+            yZGuQDjUCuV1lNqXSkgt6JBY+FttrSVtAOAjQgtRp33yWa1YccUEhSoXYbqI7ppf
+            asO4CLhm05XzMer9+zIVDG0HX0FrstwbN0GaLSFe9F4S1oAoellksinnueFhAgMB
+            AAGjUzBRMB0GA1UdDgQWBBQIKrXXhSsPUpc2RAcVgPkGXMx9ojAfBgNVHSMEGDAW
+            gBQIKrXXhSsPUpc2RAcVgPkGXMx9ojAPBgNVHRMBAf8EBTADAQH/MA0GCSqGSIb3
+            DQEBCwUAA4IBgQBMP9+SBfEh6jx+to3SSt2SmbI1iUfnzTUrtDvnkXCXerWR5Wdq
+            Fkjex6gjaa98N+1olD45FPTF/HGHr8oJ1MQSmcnBCE8Bs0I93CRS+2zVWOMCCWxy
+            AljC1p7WunC1bsRDKrPy/dKtVOxpv4GyFe75x1B2xqW3zko9Q+aNrfv5cWQjSDTg
+            Va7Y/lrYPzq13RYOg+IPYranKrAOthm/F+FK7xElSLYn/5vVuJlI1y/aRUnsvMd6
+            Vc1WwWOuvS+j4JfWF+960i4yaYUobjVKVe5shr+tMYpKLRha6zWMu7e62uC3iEsj
+            4r6jX+NbyYTEfsD6/GcORL6f5JxqXklw3uL+55oTjnQQO939wyXrBEmo62xQZ3Me
+            WPPQsy3KGJCdOgdDRgSIjrb7+0UB06bVKS+MKISH0qmRfijjrpPr0lpJytRfvVFw
+            qZxG2JRmHLYYaV7A9M34ZOjqVnaiwP+p/2q1tei3jUR+scHgW77QacpoaalzjTQ5
+            AFZu28AMb0krnmk=
+            -----END CERTIFICATE-----
+        run: |
+          umask 077
+          mkdir -p "$RUNNER_TEMP/play-private"
+          printf '%s\n' "$TRANSFER_CERTIFICATE" > "$RUNNER_TEMP/play-recipient.pem"
+          tar -cf "$RUNNER_TEMP/play-package.tar" -C app/build/outputs/bundle/release app-release.aab -C "$GITHUB_WORKSPACE/app/build/outputs" PLAY-VERIFICATION.txt
+          openssl cms -encrypt -binary -aes-256-cbc -in "$RUNNER_TEMP/play-package.tar" -outform DER -out "$RUNNER_TEMP/play-private/Alfonso-20.aab.tar.p7m" "$RUNNER_TEMP/play-recipient.pem"
+          rm -f "$RUNNER_TEMP/play-package.tar"
+      - name: Provide encrypted transfer artifact only
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: Alfonso-20-encrypted-play-transfer
+          path: ${{ runner.temp }}/play-private/Alfonso-20.aab.tar.p7m
+          retention-days: 1
+          if-no-files-found: error
       - name: Remove signing files from runner
         if: always()
         run: rm -f signing/home-sprachsteuerung.jks signing/signing.properties
